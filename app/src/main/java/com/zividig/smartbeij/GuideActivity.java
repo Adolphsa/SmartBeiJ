@@ -154,6 +154,7 @@ public class GuideActivity extends Activity {
 
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
+
         }
     }
 
