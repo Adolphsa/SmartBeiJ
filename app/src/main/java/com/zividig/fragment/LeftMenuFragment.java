@@ -1,4 +1,4 @@
-package com.zividig.frament;
+package com.zividig.fragment;
 
 import android.view.View;
 

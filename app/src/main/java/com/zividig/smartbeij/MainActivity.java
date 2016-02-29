@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
-import com.zividig.frament.LeftMenuFragment;
-import com.zividig.frament.MainContextFragment;
+import com.zividig.fragment.LeftMenuFragment;
+import com.zividig.fragment.MainContextFragment;
 
 public class MainActivity extends SlidingActivity {
 
