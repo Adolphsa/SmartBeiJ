@@ -9,20 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
+ * fragment的基类
  * Created by Administrator on 2016-02-26.
  */
 public abstract class BaseFragment extends android.app.Fragment {
 
     public Activity mActivity;
 
-    //创建frament
+    //创建fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mActivity = getActivity();
         super.onCreate(savedInstanceState);
     }
 
-    //处理frament的布局
+    //处理fragment的布局
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
