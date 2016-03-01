@@ -97,6 +97,11 @@ public class MainContextFragment extends BaseFragment {
         viewPagerList.get(0).initData();//默认初始化首页数据
     }
 
+    public NewsCenterPager getNewsCenterPager(){
+        NewsCenterPager pager = (NewsCenterPager)viewPagerList.get(1);
+        return pager;
+    }
+
     class viewPagerContextAdapter extends PagerAdapter{
 
         @Override

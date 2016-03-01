@@ -1,5 +1,7 @@
 package com.zividig.smartbeij;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
@@ -7,6 +9,8 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.zividig.fragment.LeftMenuFragment;
 import com.zividig.fragment.MainContextFragment;
+
+import org.xutils.x;
 
 public class MainActivity extends SlidingActivity {
 
@@ -18,8 +22,11 @@ public class MainActivity extends SlidingActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setBehindContentView(R.layout.activity_leftmenu);
+        //初始化xutils
+        x.Ext.init(getApplication());
+        x.Ext.setDebug(true);
 
+        setBehindContentView(R.layout.activity_leftmenu);//加入侧边栏Fragment
         SlidingMenu menu = getSlidingMenu();//获取侧边栏SlidingMenu对象
         menu.setMode(SlidingMenu.LEFT); //左滑
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN); //设置成全屏触摸
@@ -29,13 +36,28 @@ public class MainActivity extends SlidingActivity {
         initFragment();
     }
 
+    //向侧边栏和主页中添加布局
     public void initFragment(){
         android.app.FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
 
-        transaction.replace(R.id.ll_leftMenu,new LeftMenuFragment(),FRAGMENT_LEFT_MENU);
-        transaction.replace(R.id.ll_mainContext,new MainContextFragment(),FRAGMENT_MAIN_CONTEXT);
+        transaction.replace(R.id.ll_leftMenu, new LeftMenuFragment(), FRAGMENT_LEFT_MENU);
+        transaction.replace(R.id.ll_mainContext, new MainContextFragment(), FRAGMENT_MAIN_CONTEXT);
 
         transaction.commit(); //提交事务
+    }
+
+    //获取侧边栏的对象
+    public Fragment getLeftFrament(){
+        FragmentManager fm = getFragmentManager();
+        LeftMenuFragment leftMenuFragment = (LeftMenuFragment) fm.findFragmentByTag(FRAGMENT_LEFT_MENU);
+        return leftMenuFragment;
+    }
+
+    //获取主内容的对象
+    public Fragment getMainFrament(){
+        FragmentManager fm = getFragmentManager();
+        MainContextFragment MainFragment = (MainContextFragment) fm.findFragmentByTag(FRAGMENT_MAIN_CONTEXT);
+        return MainFragment;
     }
 }
