@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 
 /**
+ * 智慧服务
  * Created by Administrator on 2016-02-29.
  */
 public class SmartServicePager extends BasePager {

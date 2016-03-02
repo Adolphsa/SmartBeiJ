@@ -32,7 +32,7 @@ import comzividig.utils.GlobalURL;
  */
 public class NewsCenterPager extends BasePager {
 
-    MenuTitleData menuTitleData;//服务器的标题数据
+    public MenuTitleData menuTitleData;//服务器的标题数据
     public ArrayList<BaseDetilPager> detilList;
 
     public NewsCenterPager(Activity activity) {
@@ -45,15 +45,8 @@ public class NewsCenterPager extends BasePager {
         title.setText("新闻");
         setSlidingMenuEnable(true);
 
-        TextView text = new TextView(mActivity);
-        text.setText("新闻中心");
-        text.setTextSize(20);
-        text.setTextColor(Color.RED);
-        text.setGravity(Gravity.CENTER);
 
-        flContent.addView(text);
-
-        getDataFormService();
+        getDataFormService();//获取数据
     }
 
     //从服务器获取数据
@@ -105,6 +98,7 @@ public class NewsCenterPager extends BasePager {
         detilList.add(new ImgDetilPager(mActivity));
         detilList.add(new InteractDetilPager(mActivity));
 
+        setDetilPager(0);
     }
 
     //设置侧边栏的页面
@@ -113,6 +107,10 @@ public class NewsCenterPager extends BasePager {
        View view = detilList.get(position).rootView;
         flContent.removeAllViews();
         flContent.addView(view);
+
+        //设置侧边栏的标题
+        MenuTitleData.SlidingMenuData slidingMenuData = menuTitleData.data.get(position);
+        title.setText(slidingMenuData.title);
     }
 
 }

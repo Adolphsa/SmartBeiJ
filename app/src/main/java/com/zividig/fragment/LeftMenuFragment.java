@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.zividig.data.MenuTitleData;
 import com.zividig.smartbeij.MainActivity;
 import com.zividig.smartbeij.R;
@@ -49,8 +50,16 @@ public class LeftMenuFragment extends BaseFragment {
                 mAdapter.notifyDataSetChanged();//通知view重新绘制界面
 
                 setDetilPager(position);
+                setSlidingShow();//设置侧边栏关闭
             }
         });
+    }
+
+    //设置侧边栏关闭的方法
+    public void setSlidingShow(){
+        MainActivity mainActivity = (MainActivity) mActivity;
+        SlidingMenu menu = mainActivity.getSlidingMenu();
+        menu.toggle();
     }
 
     //获取标题数据

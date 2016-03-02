@@ -31,7 +31,7 @@ public class MainActivity extends SlidingActivity {
         menu.setMode(SlidingMenu.LEFT); //左滑
         menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN); //设置成全屏触摸
         menu.setBehindOffset(500); //设置预留屏幕宽度
-        menu.setFadeDegree(0.35f);
+
 
         initFragment();
     }

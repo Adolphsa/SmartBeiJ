@@ -40,6 +40,20 @@ public class BasePager{
         btn_menu = (ImageButton)rootViewPager.findViewById(R.id.imgBtn_menu);
         flContent = (FrameLayout)rootViewPager.findViewById(R.id.fl_content);
 
+        btn_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSlidingShow();
+            }
+        });
+
+    }
+
+    //设置侧边栏关闭的方法
+    public void setSlidingShow(){
+        MainActivity mainActivity = (MainActivity) mActivity;
+        SlidingMenu menu = mainActivity.getSlidingMenu();
+        menu.toggle();
     }
 
     //初始化数据

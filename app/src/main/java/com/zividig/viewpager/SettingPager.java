@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
+ * 设置页面
  * Created by Administrator on 2016-02-29.
  */
 public class SettingPager extends BasePager {

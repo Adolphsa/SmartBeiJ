@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import java.util.jar.Attributes;
 
 /**
+ * 自定义ViewPager   不能滑动
  * Created by Administrator on 2016-02-29.
  */
 public class NoScrollViewPager extends ViewPager {

@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.widget.TextView;
 
 /**
+ * 政务
  * Created by Administrator on 2016-02-29.
  */
 public class GovAffairsPager extends BasePager {

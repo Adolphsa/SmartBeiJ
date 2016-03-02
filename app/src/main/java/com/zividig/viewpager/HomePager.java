@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 /**
+ * 首页
  * Created by Administrator on 2016-02-29.
  */
 public class HomePager extends BasePager {
