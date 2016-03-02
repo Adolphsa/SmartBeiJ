@@ -1,21 +1,17 @@
 package com.zividig.viewpager;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zividig.data.MenuTitleData;
 import com.zividig.fragment.LeftMenuFragment;
-import com.zividig.slidingview.BaseDetilPager;
-import com.zividig.slidingview.ImgDetilPager;
-import com.zividig.slidingview.InteractDetilPager;
-import com.zividig.slidingview.NewsDetilPager;
-import com.zividig.slidingview.TopicsDetilPager;
+import com.zividig.slidingview.BaseDetailPager;
+import com.zividig.slidingview.ImgDetailPager;
+import com.zividig.slidingview.InteractDetailPager;
+import com.zividig.slidingview.NewsDetailPager;
+import com.zividig.slidingview.TopicsDetailPager;
 import com.zividig.smartbeij.MainActivity;
 
 import org.xutils.common.Callback;
@@ -33,7 +29,7 @@ import comzividig.utils.GlobalURL;
 public class NewsCenterPager extends BasePager {
 
     public MenuTitleData menuTitleData;//服务器的标题数据
-    public ArrayList<BaseDetilPager> detilList;
+    public ArrayList<BaseDetailPager> detailList;
 
     public NewsCenterPager(Activity activity) {
         super(activity);
@@ -92,25 +88,27 @@ public class NewsCenterPager extends BasePager {
         LeftMenuFragment lmf = (LeftMenuFragment) mainActivity.getLeftFrament();
         lmf.getData(menuTitleData);
 
-        detilList = new ArrayList<BaseDetilPager>();
-        detilList.add(new NewsDetilPager(mActivity));
-        detilList.add(new TopicsDetilPager(mActivity));
-        detilList.add(new ImgDetilPager(mActivity));
-        detilList.add(new InteractDetilPager(mActivity));
+        detailList = new ArrayList<>();
+        detailList.add(new NewsDetailPager(mActivity, menuTitleData.data.get(0).children));
+        detailList.add(new TopicsDetailPager(mActivity));
+        detailList.add(new ImgDetailPager(mActivity));
+        detailList.add(new InteractDetailPager(mActivity));
 
-        setDetilPager(0);
+        setDetailPager(0);
     }
 
     //设置侧边栏的页面
-    public void setDetilPager(int position){
+    public void setDetailPager(int position){
 
-       View view = detilList.get(position).rootView;
+        BaseDetailPager pager = detailList.get(position);
         flContent.removeAllViews();
-        flContent.addView(view);
+        flContent.addView(pager.rootView);
 
         //设置侧边栏的标题
         MenuTitleData.SlidingMenuData slidingMenuData = menuTitleData.data.get(position);
         title.setText(slidingMenuData.title);
+
+        pager.initData();
     }
 
 }

@@ -9,12 +9,12 @@ import com.zividig.viewpager.BasePager;
  * 侧边栏切换的页面的基类
  * Created by Administrator on 2016-03-01.
  */
-public abstract class BaseDetilPager {
+public abstract class BaseDetailPager {
 
     public Activity mActivity;
     public View rootView;
 
-    public BaseDetilPager(Activity activity){
+    public BaseDetailPager(Activity activity){
         mActivity = activity;
         rootView = initView();
     }

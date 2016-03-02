@@ -74,11 +74,12 @@ public class LeftMenuFragment extends BaseFragment {
 
     }
 
+    //设置侧边栏菜单的详情
     public void setDetilPager(int position){
         MainActivity mainActivity = (MainActivity) mActivity;
         MainContextFragment mainContext = (MainContextFragment)mainActivity.getMainFrament();
         NewsCenterPager newsCenterPager = mainContext.getNewsCenterPager();
-        newsCenterPager.setDetilPager(position);
+        newsCenterPager.setDetailPager(position);
     }
 
     //侧边栏ListView的适配器Adapter

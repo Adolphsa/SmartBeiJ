@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * 组图详情页
+ * 专题详情页
  * Created by Administrator on 2016-03-01.
  */
-public class ImgDetilPager extends BaseDetilPager {
+public class TopicsDetailPager extends BaseDetailPager {
 
-    public ImgDetilPager(Activity activity) {
+    public TopicsDetailPager(Activity activity) {
         super(activity);
     }
 
@@ -20,7 +20,7 @@ public class ImgDetilPager extends BaseDetilPager {
     public View initView() {
 
         TextView text = new TextView(mActivity);
-        text.setText("组图 -- 详情页");
+        text.setText("专题 -- 详情页");
         text.setTextSize(20);
         text.setTextColor(Color.RED);
         text.setGravity(Gravity.CENTER);
