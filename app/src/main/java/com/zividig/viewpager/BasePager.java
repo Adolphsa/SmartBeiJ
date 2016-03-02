@@ -14,7 +14,7 @@ import com.zividig.smartbeij.MainActivity;
 import com.zividig.smartbeij.R;
 
 /**
- * viewPager的基类
+ * viewPager页面的基类
  * Created by Administrator on 2016-02-29.
  */
 public class BasePager{
