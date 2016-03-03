@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".GuideActivity"/>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" android:theme="@style/Theme.PageIndicatorDefaults"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

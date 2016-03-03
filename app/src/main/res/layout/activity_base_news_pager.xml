@@ -4,10 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.viewpagerindicator.TabPageIndicator
+            android:layout_weight="1"
+            android:id="@+id/indicator"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp" />
+
+        <ImageButton
+            android:id="@+id/btn_pagerChange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/news_cate_arr"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:layout_marginLeft="5dp"
+            android:onClick="nextPager"
+            />
+
+    </LinearLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_newsTab"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
     </android.support.v4.view.ViewPager>
 

@@ -3,6 +3,7 @@ package com.zividig.viewpager;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Chronometer;
 
@@ -19,12 +20,12 @@ public class NoScrollViewPager extends ViewPager {
     }
 
     public NoScrollViewPager(Context context,AttributeSet attrs){
-        super(context,attrs);
+        super(context, attrs);
     }
 
-    //不拦截事件的传递
+    //不拦截事件
     @Override
-    public boolean onInterceptHoverEvent(MotionEvent event) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
         return false;
     }
 

@@ -5,7 +5,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
+import com.viewpagerindicator.TabPageIndicator;
 import com.zividig.data.MenuTitleData;
 import com.zividig.newspager.BaseNewsTabPager;
 import com.zividig.smartbeij.R;
@@ -19,8 +21,11 @@ import java.util.ArrayList;
 public class NewsDetailPager extends BaseDetailPager {
 
     private ArrayList<BaseNewsTabPager> mArrayList;
-    private ViewPager mViewPager;
     private ArrayList<MenuTitleData.MainMenuData> data;
+
+    private ViewPager mViewPager;
+    private TabPageIndicator indicator;
+    private ImageButton nextPager;  //切换新闻标题的按钮
 
     public NewsDetailPager(Activity activity) {
         super(activity);
@@ -38,6 +43,19 @@ public class NewsDetailPager extends BaseDetailPager {
         View view = View.inflate(mActivity, R.layout.activity_base_news_pager,null);
         mViewPager = (ViewPager) view.findViewById(R.id.vp_newsTab);
 
+        //初始化控件TabPageIndicator
+        indicator = (TabPageIndicator) view.findViewById(R.id.indicator);
+        nextPager = (ImageButton) view.findViewById(R.id.btn_pagerChange);
+
+        //设置监听，当按钮被点击后，页面加1
+        nextPager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentItem = mViewPager.getCurrentItem();
+                mViewPager.setCurrentItem(++currentItem);
+            }
+        });
+
         return  view;
     }
 
@@ -52,9 +70,17 @@ public class NewsDetailPager extends BaseDetailPager {
         }
 
         mViewPager.setAdapter(new NewsTabAdapter());
+        indicator.setViewPager(mViewPager);
     }
 
+
+
     class NewsTabAdapter extends PagerAdapter{
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return data.get(position).title;
+        }
 
         @Override
         public int getCount() {
@@ -68,10 +94,10 @@ public class NewsDetailPager extends BaseDetailPager {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-
-            container.addView((mArrayList.get(position).rootView));
-            mArrayList.get(position).initData();
-            return mArrayList.get(position).rootView;
+            BaseNewsTabPager pager = mArrayList.get(position);
+            container.addView((pager.rootView));
+            pager.initData();
+            return pager.rootView;
         }
 
         @Override
