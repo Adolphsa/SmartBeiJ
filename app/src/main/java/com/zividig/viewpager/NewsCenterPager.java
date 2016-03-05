@@ -73,7 +73,7 @@ public class NewsCenterPager extends BasePager {
     }
 
     //解析网络数据
-    public void parseData(String result){
+    protected void parseData(String result){
         Gson gson = new Gson();
         menuTitleData = gson.fromJson(result, MenuTitleData.class);
         Log.d("解析成功了", menuTitleData.toString());

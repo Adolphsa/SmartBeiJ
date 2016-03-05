@@ -27,6 +27,7 @@ public class MainActivity extends SlidingActivity {
         //初始化xutils
         x.Ext.init(getApplication());
         x.Ext.setDebug(true);
+        x.view().inject(this);
 
         setBehindContentView(R.layout.activity_leftmenu);//加入侧边栏Fragment
         SlidingMenu menu = getSlidingMenu();//获取侧边栏SlidingMenu对象

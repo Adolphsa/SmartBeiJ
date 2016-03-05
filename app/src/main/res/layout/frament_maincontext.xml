@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.zividig.viewpager.NoScrollViewPager
+    <com.zividig.customviewpager.NoScrollViewPager
         android:id="@+id/vp_mainContext"
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
-    </com.zividig.viewpager.NoScrollViewPager>
+    </com.zividig.customviewpager.NoScrollViewPager>
 
     <RadioGroup
         android:id="@+id/radioBtn_group"
