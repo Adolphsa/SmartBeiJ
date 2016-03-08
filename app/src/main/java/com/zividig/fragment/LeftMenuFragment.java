@@ -34,7 +34,6 @@ public class LeftMenuFragment extends BaseFragment {
 
         slidingMenuTitle = (ListView)leftMenuView.findViewById(R.id.lv_slidingMenu);
 
-
         return leftMenuView;
     }
 

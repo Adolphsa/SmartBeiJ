@@ -98,6 +98,7 @@ public class BaseNewsTabPager extends BaseDetailPager {
         });
     }
 
+    //解析网络数据
     protected void parseData(String result){
         Gson gson = new Gson();
         newsTabData = gson.fromJson(result,NewsTabData.class);
@@ -126,7 +127,8 @@ public class BaseNewsTabPager extends BaseDetailPager {
                     .setImageScaleType(ImageView.ScaleType.FIT_XY)
                     .setLoadingDrawableId(R.mipmap.news_pic_default)
                     .build();
-            x.image().bind(image,newsTabData.data.topnews.get(position).topimage,imageOptions);
+            NewsTabData.TopnewsData topnews = newsTabData.data.topnews.get(position);
+            x.image().bind(image,topnews.topimage,imageOptions); //设置图片的url并加载显示
             container.addView(image);
             return image;
         }

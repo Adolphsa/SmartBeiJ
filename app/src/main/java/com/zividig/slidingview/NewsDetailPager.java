@@ -78,7 +78,7 @@ public class NewsDetailPager extends BaseDetailPager {
     class NewsTabAdapter extends PagerAdapter{
 
         @Override
-        public CharSequence getPageTitle(int position) {
+        public CharSequence getPageTitle(int position) { //返回当前页面的标题
             return data.get(position).title;
         }
 
