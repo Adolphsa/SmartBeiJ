@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.viewpagerindicator.CirclePageIndicator;
 import com.zividig.data.MenuTitleData;
 import com.zividig.data.NewsTabData;
 import com.zividig.slidingview.BaseDetailPager;
@@ -28,6 +29,8 @@ import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.util.ArrayList;
+
 import comzividig.utils.GlobalURL;
 
 /**
@@ -39,8 +42,13 @@ public class BaseNewsTabPager extends BaseDetailPager {
     private MenuTitleData.MainMenuData data;
     private ViewPager newsImageViewPager;
 
+    private CirclePageIndicator indicator;
+
     private String topImgUrl;
     public  NewsTabData newsTabData;
+    private TextView topNewTitle;
+
+    private ArrayList<NewsTabData.TopnewsData> topNewsList; //顶部图片集合
 
     public BaseNewsTabPager(Activity activity, MenuTitleData.MainMenuData mainMenuData) {
         super(activity);
@@ -53,6 +61,10 @@ public class BaseNewsTabPager extends BaseDetailPager {
 
         View view = View.inflate(mActivity,R.layout.layout_newsimage_viewpager,null);
         newsImageViewPager = (ViewPager) view.findViewById(R.id.vp_newsImage);
+
+        indicator = (CirclePageIndicator)view.findViewById(R.id.indicator); //滚动的小圆点
+
+        topNewTitle = (TextView)view.findViewById(R.id.tv_topImgText);
         return view;
 
     }
@@ -104,8 +116,36 @@ public class BaseNewsTabPager extends BaseDetailPager {
         newsTabData = gson.fromJson(result,NewsTabData.class);
         Log.d("parseData", "解析成功");
 
+        topNewsList = newsTabData.data.topnews; //数据在List中
+
         //解析完成后才有数据
         newsImageViewPager.setAdapter(new newsImageAdapter());
+        indicator.setViewPager(newsImageViewPager);
+        indicator.setOnPageChangeListener(new TopImageListener());
+        indicator.setSnap(true);
+        indicator.onPageSelected(0);
+
+        topNewTitle.setText(topNewsList.get(0).title);
+    }
+
+    class TopImageListener implements ViewPager.OnPageChangeListener{
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+            topNewTitle.setText(topNewsList.get(position).title); //设置顶部图片标题
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
     }
 
     class newsImageAdapter extends PagerAdapter{
@@ -127,7 +167,7 @@ public class BaseNewsTabPager extends BaseDetailPager {
                     .setImageScaleType(ImageView.ScaleType.FIT_XY)
                     .setLoadingDrawableId(R.mipmap.news_pic_default)
                     .build();
-            NewsTabData.TopnewsData topnews = newsTabData.data.topnews.get(position);
+            NewsTabData.TopnewsData topnews = topNewsList.get(position);
             x.image().bind(image,topnews.topimage,imageOptions); //设置图片的url并加载显示
             container.addView(image);
             return image;

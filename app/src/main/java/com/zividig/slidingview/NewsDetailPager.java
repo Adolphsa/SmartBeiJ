@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.jeremyfeinstein.slidingmenu.lib.CustomViewAbove;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.viewpagerindicator.TabPageIndicator;
 import com.zividig.data.MenuTitleData;
 import com.zividig.newspager.BaseNewsTabPager;
+import com.zividig.smartbeij.MainActivity;
 import com.zividig.smartbeij.R;
 
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class NewsDetailPager extends BaseDetailPager {
 
         View view = View.inflate(mActivity, R.layout.activity_base_news_pager,null);
         mViewPager = (ViewPager) view.findViewById(R.id.vp_newsTab);
+        mViewPager.addOnPageChangeListener(new MyPagerChange());
 
         //初始化控件TabPageIndicator
         indicator = (TabPageIndicator) view.findViewById(R.id.indicator);
@@ -73,8 +77,33 @@ public class NewsDetailPager extends BaseDetailPager {
         indicator.setViewPager(mViewPager);
     }
 
+    //
+    class MyPagerChange implements ViewPager.OnPageChangeListener {
 
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            MainActivity mainActivity = (MainActivity) mActivity;
+            SlidingMenu slidingMenu = mainActivity.getSlidingMenu();
+            if (position == 0){ //是第一个页面北京的时候  侧边栏能出来
+                slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+            }else{//其他页面侧边栏不能出来
+                slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+            }
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
+
+    //适配器
     class NewsTabAdapter extends PagerAdapter{
 
         @Override
