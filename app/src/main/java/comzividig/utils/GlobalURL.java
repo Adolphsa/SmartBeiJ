@@ -7,5 +7,6 @@ package comzividig.utils;
 public class GlobalURL {
 
     public final static String hostURL = "http://192.168.1.108:8080/zhbj";
+    public final static String onlineHostURL = "http://zhihuibj.sinaapp.com/zhbj";
     public final static String dataURL = hostURL + "/categories.json";
 }
