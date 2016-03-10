@@ -4,6 +4,7 @@ package com.zividig.newspager;
 import android.app.Activity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viewpagerindicator.CirclePageIndicator;
+import com.zividig.customviewpager.RefreshListView;
 import com.zividig.data.MenuTitleData;
 import com.zividig.data.NewsTabData;
 import com.zividig.slidingview.BaseDetailPager;
@@ -48,27 +50,49 @@ public class BaseNewsTabPager extends BaseDetailPager {
     private ArrayList<NewsTabData.NewsData> newsList;
 
     //listView新闻标题相关
-    private ListView newsCotentListView;
+    private RefreshListView newsCotentListView;
+    private String mMoreURL; //更多的URL
+    private NewsAdapter newsAdapter;
 
 
     public BaseNewsTabPager(Activity activity, MenuTitleData.MainMenuData mainMenuData) {
         super(activity);
         data = mainMenuData;
         Log.d("小孩数据",data.toString());
+        topImgUrl = GlobalURL.hostURL + data.url;
     }
 
     @Override
     public View initView() {
 
         View view = View.inflate(mActivity,R.layout.layout_newsimage_viewpager,null);
-        newsCotentListView = (ListView) view.findViewById(R.id.lv_news_content);
+        newsCotentListView = (RefreshListView) view.findViewById(R.id.lv_news_content);
 
+        //顶部图片
         View headerView = View.inflate(mActivity,R.layout.layout_news_header_listview,null);
         newsImageViewPager = (ViewPager) headerView.findViewById(R.id.vp_newsImage); //顶部图片的图片
         indicator = (CirclePageIndicator)headerView.findViewById(R.id.indicator); //滚动的小圆点
         topNewTitle = (TextView)headerView.findViewById(R.id.tv_topImgText); //图片标题
 
-        newsCotentListView.addHeaderView(headerView); //给listView增加头布局
+        newsCotentListView.addHeaderView(headerView); //给listView增加图片头布局
+
+
+        newsCotentListView.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataFormInternet();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (mMoreURL != null) {
+                    getMoreFormInternet();
+                } else {
+                    Toast.makeText(mActivity, "已经是最后一页了", Toast.LENGTH_SHORT).show();
+                    newsCotentListView.onRefreshComplete(false);
+                }
+            }
+        });
         return view;
 
     }
@@ -82,23 +106,52 @@ public class BaseNewsTabPager extends BaseDetailPager {
 
     //从服务器获取数据
     public void getDataFormInternet(){
-
-        topImgUrl = GlobalURL.hostURL + data.url;
-        Log.d("顶部图片的URL", topImgUrl);
         RequestParams params = new RequestParams(topImgUrl);
         x.http().get(params, new Callback.CommonCallback<String>() {
 
             @Override
             public void onSuccess(String result) {
 
-                parseData(result); //解析数据
-
+                parseData(result,false); //解析数据
+                newsCotentListView.onRefreshComplete(true);
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 System.out.print(ex);
                 Toast.makeText(mActivity, "顶部图片加载失败", Toast.LENGTH_SHORT).show();
+                newsCotentListView.onRefreshComplete(false);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    public void getMoreFormInternet(){
+
+        RequestParams params = new RequestParams(mMoreURL);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+
+            @Override
+            public void onSuccess(String result) {
+
+                parseData(result,true); //解析数据
+                newsCotentListView.onRefreshComplete(true);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.print(ex);
+                Toast.makeText(mActivity, "顶部图片加载失败", Toast.LENGTH_SHORT).show();
+                newsCotentListView.onRefreshComplete(false);
             }
 
             @Override
@@ -114,33 +167,50 @@ public class BaseNewsTabPager extends BaseDetailPager {
     }
 
     //解析网络数据
-    protected void parseData(String result){
+    protected void parseData(String result,boolean isMore){
         Gson gson = new Gson();
         newsTabData = gson.fromJson(result,NewsTabData.class);
         Log.d("parseData", "解析成功");
 
-        topNewsList = newsTabData.data.topnews; //图片数据集合
-        newsList = newsTabData.data.news; //新闻集合
+        //加载更多的链接
+        String more = newsTabData.data.more;
+        if (!TextUtils.isEmpty(more)){
+            mMoreURL = GlobalURL.hostURL + more;
 
-        //解析完成后才有数据
-        if (topNewsList != null) {
-            newsImageViewPager.setAdapter(new newsImageAdapter());
-            indicator.setViewPager(newsImageViewPager);
-            indicator.setOnPageChangeListener(new TopImageListener());
-            indicator.setSnap(true);
-            indicator.onPageSelected(0);
-
-            topNewTitle.setText(topNewsList.get(0).title);
+        }else {
+            mMoreURL = null;
         }
 
-        if (newsList != null) {
-            newsCotentListView.setAdapter(new newsAdapter());
+        if (!isMore){
+            topNewsList = newsTabData.data.topnews; //图片数据集合
+            newsList = newsTabData.data.news; //新闻集合
+
+            //解析完成后才有数据
+            if (topNewsList != null) {
+                newsImageViewPager.setAdapter(new newsImageAdapter());
+                indicator.setViewPager(newsImageViewPager);
+                indicator.setOnPageChangeListener(new TopImageListener());
+                indicator.setSnap(true);
+                indicator.onPageSelected(0);
+
+                topNewTitle.setText(topNewsList.get(0).title);
+            }
+
+            if (newsList != null) {
+                newsAdapter = new NewsAdapter();
+                newsCotentListView.setAdapter(newsAdapter);
+            }
+        }else { //加载更多
+            ArrayList<NewsTabData.NewsData> moreNews = newsTabData.data.news;
+            newsList.addAll(moreNews); //将更多新闻追加在第一页的新闻下面
+            newsAdapter.notifyDataSetChanged();
         }
+
 
     }
 
     //新闻类
-    class newsAdapter extends BaseAdapter{
+    class NewsAdapter extends BaseAdapter{
 
         @Override
         public int getCount() {
