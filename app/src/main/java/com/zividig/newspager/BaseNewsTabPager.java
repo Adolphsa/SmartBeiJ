@@ -2,15 +2,16 @@ package com.zividig.newspager;
 
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +31,13 @@ import org.xutils.x;
 import java.util.ArrayList;
 
 import comzividig.utils.GlobalURL;
+import comzividig.utils.SharedPrefUtil;
 
 /**
  * 填充NewsDetilPager的页面
  * Created by Administrator on 2016-03-02.
  */
-public class BaseNewsTabPager extends BaseDetailPager {
+public class BaseNewsTabPager extends BaseDetailPager{
 
     private MenuTitleData.MainMenuData data;
     private ViewPager newsImageViewPager;
@@ -77,6 +79,7 @@ public class BaseNewsTabPager extends BaseDetailPager {
         newsCotentListView.addHeaderView(headerView); //给listView增加图片头布局
 
 
+        //新闻下拉上载
         newsCotentListView.setOnRefreshListener(new RefreshListView.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -93,8 +96,33 @@ public class BaseNewsTabPager extends BaseDetailPager {
                 }
             }
         });
+
+        //监听新闻条目的点击事件
+        newsCotentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("条目被点击了" + position);
+
+                //本地记录已读状态
+                String ids = SharedPrefUtil.getString(mActivity,"read_ids","");
+                String id_read = newsList.get(position).id;
+                if (!ids.contains(id_read)){ //新闻ID重复的不添加在后面
+                    ids = ids + newsList.get(position).id + ",";
+                    SharedPrefUtil.setString(mActivity,"read_ids",ids);
+                }
+
+                changeReadState(view);
+
+            }
+        });
+
         return view;
 
+    }
+
+    public void changeReadState(View view){
+        TextView newsTitle = (TextView) view.findViewById(R.id.tv_news_title);
+        newsTitle.setTextColor(Color.GRAY);
     }
 
     @Override
@@ -149,8 +177,7 @@ public class BaseNewsTabPager extends BaseDetailPager {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.print(ex);
-                Toast.makeText(mActivity, "顶部图片加载失败", Toast.LENGTH_SHORT).show();
+                System.out.println("更多新闻加载失败");
                 newsCotentListView.onRefreshComplete(false);
             }
 
@@ -218,7 +245,7 @@ public class BaseNewsTabPager extends BaseDetailPager {
         }
 
         @Override
-        public Object getItem(int position) {
+        public NewsTabData.NewsData getItem(int position) {
             return newsList.get(position);
         }
 
@@ -253,6 +280,14 @@ public class BaseNewsTabPager extends BaseDetailPager {
             //标题
             holder.newsContentTitle.setText(newsData.title);
             holder.newsContentData.setText(newsData.pubdate);
+
+            //判断是否是已读新闻
+            String ids = SharedPrefUtil.getString(mActivity,"read_ids","");
+            if (ids.contains(getItem(position).id)){
+                holder.newsContentTitle.setTextColor(Color.GRAY);
+            }else {
+                holder.newsContentTitle.setTextColor(Color.BLACK);
+            }
             return convertView;
         }
     }
